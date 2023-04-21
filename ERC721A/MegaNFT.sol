@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.16;
+pragma solidity =0.8.16;
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "erc721a/contracts/ERC721A.sol";
@@ -49,6 +49,8 @@ contract MegaNFT is Ownable, ERC721A {
         if (_checkPrice) {
             require(_value >= price * _num, "Not enough ETH sent, check price");
         }
+        require(_num > 0, "Number of NFTs must be greater than zero");
+        require(_value > 0, "Value must be greater than zero");
         _;
     }
 
@@ -85,18 +87,21 @@ contract MegaNFT is Ownable, ERC721A {
     /// @notice Change price of NFT - Testing purposes only, will be removed from production
     /// @param _price New NFT price
     function changePrice(uint256 _price) external onlyOwner {
+        require(_price > 0, "Price must be greater than zero");
         price = _price;
     }
 
     /// @notice Change price of Supply of NFTs - Testing purposes only, will be removed from production
     /// @param _maxSupply New NFT supply
     function changeMaxSupply(uint256 _maxSupply) external onlyOwner {
+        require(_maxSupply > 0, "Supply must be greater than zero");
         maxSupply = _maxSupply;
     }
 
     /// @notice Change the base URI of all NFTs on the contract
     /// @param _baseTokenURI New NFT base URI
-    function setBaseURI(string memory _baseTokenURI) public onlyOwner {
+    function setBaseURI(string memory _baseTokenURI) external onlyOwner {
+        require(bytes(_baseTokenURI).length > 0, "Base URI should not be empty");
         baseTokenURI = _baseTokenURI;
     }
 
@@ -129,6 +134,7 @@ contract MegaNFT is Ownable, ERC721A {
             _exists(_tokenId),
             "ERC721Metadata: URI query for nonexistent token"
         );
+        require(_tokenId != 0, "ERC721Metadata: token must not be 0");
 
         string memory currentBaseURI = _baseURI();
         return
