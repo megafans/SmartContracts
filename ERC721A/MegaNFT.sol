@@ -50,7 +50,6 @@ contract MegaNFT is Ownable, ERC721A {
             require(_value >= price * _num, "Not enough ETH sent, check price");
         }
         require(_num > 0, "Number of NFTs must be greater than zero");
-        require(_value > 0, "Value must be greater than zero");
         _;
     }
 
@@ -134,7 +133,6 @@ contract MegaNFT is Ownable, ERC721A {
             _exists(_tokenId),
             "ERC721Metadata: URI query for nonexistent token"
         );
-        require(_tokenId != 0, "ERC721Metadata: token must not be 0");
 
         string memory currentBaseURI = _baseURI();
         return
